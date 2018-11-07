@@ -40,6 +40,7 @@ function quentinData() { //everything is contained within this one function
     ];
 
     //Create SVG element
+	d3.select("svg").remove(); //removes an existing svg
     var svg = d3.select("body")
         .append("svg")
         .attr("width", w)

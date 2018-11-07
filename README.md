@@ -2,7 +2,7 @@
 
 * * *
 
-This is a joint project demonstrating the use of D3.js
+This is a joint project demonstrating the use of D3.js for data visualization.
 
 **index.html** - landing page for clicking through the project
 
