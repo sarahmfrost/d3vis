@@ -1,5 +1,14 @@
 //scp d3vis/* jakutagawa@riverdance.soe.ucsc.edu:/soe/jakutagawa/.html/d3vis
 
+<style>
+text {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    pointer-events: none;
+}
+</style>
+
 function jonData() {
 
     var files = ["./eVIP_data/eVIP_pathway_pvals.csv", "./eVIP_data/eVIP_pathway_overall_and_screen_calls.csv"];
@@ -12,12 +21,12 @@ function jonData() {
     };
 
     var diameter = 600;
-    var width = 800 - margin.left - margin.right;
+    var width = 5000 - margin.left - margin.right;
     var height = 600 - margin.top - margin.bottom;
     var clickToggle = false;
     var color = d3.scaleOrdinal(["#FA8334", "#AFFC41", "#19647E", "#7FDDDD", "#949396", "#DCF763", "#00C6D0", "#C1C1C1", "#666666", "#FDCDAE"]);
     var radius = d3.scaleLinear()
-        .domain([0, 1.0])
+        .domain([0, 4.5])
         .range([15, 23]);
         var x = d3.scaleBand().rangeRound([0, width]);
             var y = d3.scaleBand().rangeRound([height, 0]);
@@ -60,6 +69,7 @@ function jonData() {
                 };
             });
             d.groups.sort(function(x, y) {
+
                 return d3.descending(y.value, x.value);
             });
 
@@ -72,6 +82,7 @@ function jonData() {
         x.domain(mutationNames);
 
         color.domain(mutationNames);
+
         var rows = svg.selectAll(".row")
             .data(pval_data)
             .enter()
@@ -96,15 +107,16 @@ function jonData() {
             .attr("class", function(d) {
                 return d.className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
             })
+            .filter(function (d) {return d.value <= 0.1})
             .style('fill', function(d, i) {
                 return color(d.name);
             })
             .attr("cx", x.bandwidth() / 2)
             .attr("cy", y.bandwidth() / 2)
             .attr("r", function(d) {
-                return d.value === 0 ? 0 : radius(d.value);
+                return d.value === 0 ? 0 : radius(-Math.log10(d.value));
             })
-            //.on("click", highlightCircles);
+            .on("click", highlightCircles);
 
         var text = cells.append("text")
             .attr("class", function(d) {
@@ -115,7 +127,7 @@ function jonData() {
             .attr("dx", x.bandwidth() / 2)
             .attr("dy", y.bandwidth() / 2 + 4)
             .text(function(d) {
-                return d.value !== 0 ? d.value : '';
+                return d.value !== 0 ? d.value.toExponential(1) : '';
             });
 
         svg.append("g")
@@ -147,7 +159,17 @@ function jonData() {
                     return d.Count; });*/
         //console.log(rowNames)
     });
-
+    function highlightCircles(d) {
+            if (!clickToggle) {
+                var className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
+                d3.selectAll("circle, text").transition().style("fill-opacity", function (elem) {
+                    if (elem.className !== className) return 0.07;
+                })
+            } else {
+                d3.selectAll("circle, text").transition().style("fill-opacity", 1);
+            }
+            clickToggle = !clickToggle;
+        }
     /*d3.queue()
     .defer(d3.csv, "./eVIP_data/eVIP_pathway_pvals.csv")
     .defer(d3.csv, "./eVIP_data/eVIP_pathway_overall_and_screen_calls")
