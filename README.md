@@ -12,6 +12,8 @@ This is a joint project demonstrating the use of D3.js for data visualization.
 
 **J_function.js** - Jon's javascript code
 
+**B_function.js** - Brett's javascript code
+
 This repo was created for **UCSC DANM 220** - Introduction to Programming for Artists.
 
 _updated - 2018-11-16_
