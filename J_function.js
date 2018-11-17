@@ -1,5 +1,6 @@
 //scp d3vis/* jakutagawa@riverdance.soe.ucsc.edu:/soe/jakutagawa/.html/d3vis
 
+/*
 <style>
 text {
     font-family: 'Open Sans', sans-serif;
@@ -8,6 +9,7 @@ text {
     pointer-events: none;
 }
 </style>
+*/
 
 function jonData() {
 
@@ -28,8 +30,8 @@ function jonData() {
     var radius = d3.scaleLinear()
         .domain([0, 4.5])
         .range([15, 23]);
-        var x = d3.scaleBand().rangeRound([0, width]);
-            var y = d3.scaleBand().rangeRound([height, 0]);
+    var x = d3.scaleBand().rangeRound([0, width]);
+    var y = d3.scaleBand().rangeRound([height, 0]);
 
 
 
@@ -46,18 +48,19 @@ function jonData() {
     });
 
     Promise.all(promises).then(function(values) {
+        d3.select("svg").remove();
         var svg = d3.select(".chart")
-          .append("svg")
+            .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             //.call(responsivefy)
-          .append("g")
+            .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         var mutationNames = d3.keys(values[0][0]).filter(function(key) {
             return key !== "Pathway";
         })
 
-        var pval_data = values[0].slice(0,15);
+        var pval_data = values[0].slice(0, 15);
         var call_data = values[1];
 
         console.log(pval_data)
@@ -107,7 +110,9 @@ function jonData() {
             .attr("class", function(d) {
                 return d.className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
             })
-            .filter(function (d) {return d.value <= 0.1})
+            .filter(function(d) {
+                return d.value <= 0.1
+            })
             .style('fill', function(d, i) {
                 return color(d.name);
             })
@@ -159,17 +164,18 @@ function jonData() {
                     return d.Count; });*/
         //console.log(rowNames)
     });
+
     function highlightCircles(d) {
-            if (!clickToggle) {
-                var className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
-                d3.selectAll("circle, text").transition().style("fill-opacity", function (elem) {
-                    if (elem.className !== className) return 0.07;
-                })
-            } else {
-                d3.selectAll("circle, text").transition().style("fill-opacity", 1);
-            }
-            clickToggle = !clickToggle;
+        if (!clickToggle) {
+            var className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
+            d3.selectAll("circle, text").transition().style("fill-opacity", function(elem) {
+                if (elem.className !== className) return 0.07;
+            })
+        } else {
+            d3.selectAll("circle, text").transition().style("fill-opacity", 1);
         }
+        clickToggle = !clickToggle;
+    }
     /*d3.queue()
     .defer(d3.csv, "./eVIP_data/eVIP_pathway_pvals.csv")
     .defer(d3.csv, "./eVIP_data/eVIP_pathway_overall_and_screen_calls")
