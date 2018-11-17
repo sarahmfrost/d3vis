@@ -1,0 +1,20 @@
+text {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    pointer-events: none;
+}
+
+
+div.tooltip {
+  color: white;
+  position: absolute;
+  text-align: center;
+  /*width: 150px;*/
+  height: 16px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: rgba(0,0,0,.8);
+  border: 2px solid black;
+  pointer-events: none;
+}
