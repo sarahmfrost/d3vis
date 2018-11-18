@@ -18,3 +18,21 @@ div.tooltip {
   border: 2px solid black;
   pointer-events: none;
 }
+
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path,
+.x.axis line {
+    display: none;
+}
+
+.y.axis path,
+.y.axis line {
+    display: none;
+}

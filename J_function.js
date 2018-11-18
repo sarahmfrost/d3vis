@@ -67,6 +67,7 @@ function jonData() {
         console.log(pval_data)
         console.log(call_data[0])
 
+        // iterate through pval data to build data groups
         var k = 0;
         pval_data.forEach(function(d,k) {
             d.groups = mutationNames.map(function(name) {
