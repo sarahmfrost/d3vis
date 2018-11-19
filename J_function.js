@@ -31,7 +31,7 @@ function jonData() {
     var color = d3.scaleOrdinal(["#50514F", "#F25F5C", "#FFE066", "#247BA0", "#70C1B3"])
     var radius = d3.scaleLinear()
         .domain([0, 10])
-        .range([10, 30]);
+        .range([10, 27.5]);
     var alpha = d3.scaleLinear()
         .domain([-1, 1])
         .range([0, 1]);
@@ -70,7 +70,7 @@ function jonData() {
         var call_data = datasets[1].slice(0, 20);
         var exp_data = datasets[2].slice(0, 20);
 
-        //console.log(pval_data)
+        console.log(pval_data)
         //console.log(call_data[0])
         //console.log(exp_data)
 
@@ -82,7 +82,8 @@ function jonData() {
                     name: name,
                     value: +d[name],
                     call: call_data[k][name],
-                    exp: exp_data[k][name]
+                    exp: exp_data[k][name],
+                    //pathway: pval_data[k]["Pathway"]
                 };
             });
             d.groups.sort(function(x, y) {
@@ -242,19 +243,46 @@ function jonData() {
     function highlightCircles(d) {
         if (!clickToggle) {
             var className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
-            d3.selectAll("circle").transition().style("fill-opacity", function(d) {
-                if (d.className !== className) return 0.07;
-                else return alpha(d.exp);
-            })
-            d3.selectAll("text").transition().style("fill-opacity", function(d) {
-                if (d.className !== className) return 0.07;
-                else return 1;
-            })
+            d3.selectAll("circle").transition()
+                .duration(500)
+                .style("fill-opacity", function(d) {
+                    if (d.className !== className) return 0.07;
+                    else return alpha(d.exp);
+                })
+                .filter(function(d) {
+                    return d.value <= 0.1
+                })
+                .attr("r", function(d) {
+                    return d.value === 0 ? 0 : radius(-Math.log(d.value) * 1.5);
+                })
+            d3.selectAll("text").transition()
+                .duration(500)
+                .style("fill-opacity", function(d) {
+                    if (d.className !== className) return 0.025;
+                    else return 1;
+                })
+                .filter(function(d) {
+                    return d.value <= 0.1
+                })
+                .attr("r", function(d) {
+                    return d.value === 0 ? 0 : radius(-Math.log(d.value));
+                })
+
         } else {
-            d3.selectAll("circle").transition().style("fill-opacity", function(d) {
-                return alpha(d.exp)
-            })
-            d3.selectAll("text").transition().style("fill-opacity", 1);
+            d3.selectAll("circle").transition()
+                .duration(500)
+                .style("fill-opacity", function(d) {
+                    return alpha(d.exp)
+                })
+                .filter(function(d) {
+                    return d.value <= 0.1
+                })
+                .attr("r", function(d) {
+                    return d.value === 0 ? 0 : radius(-Math.log(d.value))
+                })
+            d3.selectAll("text").transition()
+                .duration(500)
+                .style("fill-opacity", 1);
         }
         clickToggle = !clickToggle;
     }
