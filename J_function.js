@@ -16,28 +16,31 @@ function jonData() {
 
     loadCssFile("jon_style.css")
 
-        // set base variables
+    // set base variables
     var margin = {
         top: 10,
         right: 20,
         bottom: 20,
-        left: 40
+        left: 300
     };
 
     var diameter = 600;
     var width = 5000 - margin.left - margin.right;
-    var height = 600 - margin.top - margin.bottom;
+    var height = 1000 - margin.top - margin.bottom;
     var clickToggle = false;
     //var color = d3.scaleOrdinal(["#FA8334", "#AFFC41", "#19647E", "#7FDDDD", "#949396", "#DCF763", "#00C6D0", "#C1C1C1", "#666666", "#FDCDAE"]);
-    var color = d3.scaleOrdinal(["#50514F","#F25F5C","#FFE066","#247BA0","#70C1B3"])
+    var color = d3.scaleOrdinal(["#50514F", "#F25F5C", "#FFE066", "#247BA0", "#70C1B3"])
     var radius = d3.scaleLinear()
-        .domain([0, 4.5])
-        .range([15, 23]);
+        .domain([0, 10])
+        .range([10, 30]);
+    var alpha = d3.scaleLinear()
+        .domain([-1, 1])
+        .range([0, 1]);
     var x = d3.scaleBand().rangeRound([0, width]);
     var y = d3.scaleBand().rangeRound([height, 0]);
 
     // promise for loading files
-    var files = ["./eVIP_data/eVIP_pathway_pvals.csv", "./eVIP_data/eVIP_pathway_overall_and_screen_calls.csv"];
+    var files = ["./eVIP_data/eVIP_pathway_pvals.csv", "./eVIP_data/eVIP_pathway_overall_and_screen_calls.csv", "./eVIP_data/expression_avg_zscores.csv"];
     var promises = [];
 
     files.forEach(function(url) {
@@ -61,27 +64,31 @@ function jonData() {
             return value !== "HALLMARK_PANCREAS_BETA_CELLS";
         })
 
-        var pval_data = datasets[0].slice(0, 15);
-        var call_data = datasets[1].slice(0, 15);
+        // set dataset variables
+        var pval_data = datasets[0].slice(0, 20);
+        var call_data = datasets[1].slice(0, 20);
+        var exp_data = datasets[2].slice(0, 20);
 
         console.log(pval_data)
         console.log(call_data[0])
+        console.log(exp_data)
 
         // iterate through pval data to build data groups
         var k = 0;
-        pval_data.forEach(function(d,k) {
+        pval_data.forEach(function(d, k) {
             d.groups = mutationNames.map(function(name) {
                 return {
                     name: name,
                     value: +d[name],
-                    call: call_data[k][name]
+                    call: call_data[k][name],
+                    exp: exp_data[k][name]
                 };
             });
             d.groups.sort(function(x, y) {
 
                 return d3.descending(y.value, x.value);
             });
-        k++;
+            k++;
         });
 
         /*call_data.forEach(function (e) {
@@ -101,7 +108,7 @@ function jonData() {
 
 
         //color.domain(mutationNames);
-        color.domain(["NI","GOF","COF","LOF","Neutral"])
+        color.domain(["NI", "GOF", "COF", "LOF", "Neutral"])
 
         console.log(mutationNames)
         console.log(pathwayPredictions)
@@ -141,6 +148,11 @@ function jonData() {
             /*.style('fill', function(d, i) {
                 return color(d.name);
             })*/
+            .style("fill-opacity", function(d, i) {
+                //console.log(alpha(d.exp))
+                return alpha(d.exp);
+                //return 1;
+            })
             .style('fill', function(d, i) {
                 //console.log(d.call)
                 return color(d.call);
@@ -148,14 +160,14 @@ function jonData() {
             .attr("cx", x.bandwidth() / 2)
             .attr("cy", y.bandwidth() / 2)
             .attr("r", function(d) {
-                return d.value === 0 ? 0 : radius(-Math.log10(d.value));
+                return d.value === 0 ? 0 : radius(-Math.log(d.value));
             })
             .on("click", highlightCircles)
             .on("mouseover", function(d) {
                 div.transition()
                     .duration(200)
                     .style('opacity', 0.9);
-                div.html(d.name)
+                div.html(d.name + "<br/>" + Math.round(d.exp * 100) / 100)
                     .style('left', d3.event.pageX + 'px')
                     .style('top', d3.event.pageY - 28 + 'px');
             })
@@ -218,16 +230,24 @@ function jonData() {
         .attr('r', 20)
         .attr('fill', '#ff0000');
     }*/
-
+    
+    // function to highlight same mutation in each pathway
     function highlightCircles(d) {
         if (!clickToggle) {
             var className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
-            d3.selectAll("circle, text").transition().style("fill-opacity", function(elem) {
+            d3.selectAll("circle").transition().style("fill-opacity", function(d) {
                 if (elem.className !== className) return 0.07;
+                else return alpha(d.exp);
             })
-
+            d3.selectAll("text").transition().style("fill-opacity", function(d) {
+                if (elem.className !== className) return 0.07;
+                else return 1;
+            })
         } else {
-            d3.selectAll("circle, text").transition().style("fill-opacity", 1);
+            d3.selectAll("circle").transition().style("fill-opacity", function(d) {
+                return alpha(d.exp)
+            })
+            d3.selectAll("text").transition().style("fill-opacity", 1);
         }
         clickToggle = !clickToggle;
     }
