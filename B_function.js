@@ -1,3 +1,70 @@
+function brettData()
+
+.text {
+  font-family: avenir;
+  font-size: 20px;
+}
+
+.bar-chart {
+  fx-padding: 10px;  
+  background-color: forestgreen;
+    text-align: top;  
+    padding: 25px;
+    margin: 1px;
+    fill: white;
+    stroke: black;
+    stroke-width: 2;  
+}
+
+.bar:hover {
+    fill:gray
+}
+
+// NFl concussion data
+var data = [265, 244, 212, 279, 250, 291];
+
+// var years = ["2012", "2013", "2014", "2015", "2016", "2017"];
+
+var svgWidth = 800; 
+var svgHeight = 400
+var barPadding = 30;
+var barWidth = (svgWidth / data.length);
+
+var svg = d3.select("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+var barChart = svg.selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("class", "bar")
+    .attr("y", function(d) {
+         return svgHeight - d 
+    })
+    .attr("height", function(d) { 
+        return d; 
+    })
+    .attr("width", barWidth - barPadding)
+    .attr("transform", function (d, i) {
+        var translate = [barWidth * i, 0]; 
+        return "translate("+ translate +")";
+    });
+
+svg.selectAll("text")
+    .data(data)
+    .enter()
+    .append("svg:text")
+    .text(function(d) {return d;})
+          .attr("class", "text")
+          .attr("x", function (d,i) {return (i * 140) + 36}) 
+          .attr("y", function (d,i) {return d})
+          .attr("text-anchor", "middle");
+
+
+
+/* Previous version
+
 // NFL concussion data 
 
 var data = [{year: 2012, concussions: 265},
@@ -57,3 +124,5 @@ barChart.selectAll("text.yAxis").
   text(function(datum) { return datum.year;}).
   attr("transform", "translate(0, 18)").
   attr("class", "yAxis");
+
+*/
