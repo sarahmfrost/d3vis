@@ -1,4 +1,4 @@
-function brettData() {
+function BrettData() {
 
 loadCssFile("brett_style.css")
     
