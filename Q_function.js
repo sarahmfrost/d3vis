@@ -40,7 +40,7 @@ function quentinData() { //everything is contained within this one function
     ];
 
     //Create SVG element
-	d3.select("svg").remove(); //removes an existing svg
+	d3.selectAll("svg").remove(); //removes an existing svg
     var svg = d3.select("body")
         .append("svg")
         .attr("width", w)
@@ -69,8 +69,8 @@ function quentinData() { //everything is contained within this one function
             return d[2];
         })
         .style("opacity", .5)
-        
-        
+
+
 
     //create "polls" bar
     svg.selectAll("polls")
@@ -124,7 +124,7 @@ function quentinData() { //everything is contained within this one function
         .attr("height", function(d) {
             return d[1] * 40;
         })
-  
+
     //create "final" bar
     svg.selectAll("final")
         .data(dataset)

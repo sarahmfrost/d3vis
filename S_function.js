@@ -2,7 +2,7 @@ function sarahData() {
 
 //d3.select("#bar").selectAll("svg").remove(); //removes an existing svg, this is to prevent graphs from appearing over and over
 //d3.select("#pie").selectAll("svg").remove();
-
+d3.selectAll("svg").remove();
 //Where did i see dogs?
 //ALSO PLOT ON MAP
   //17 - Seabright

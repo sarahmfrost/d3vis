@@ -48,6 +48,7 @@ function jonData() {
 
     Promise.all(promises).then(function(datasets) {
         d3.select("svg").remove();
+        d3.selectAll("svg").remove();
         var svg = d3.select(".chart")
             .append("svg")
             .attr("width", width + margin.left + margin.right)

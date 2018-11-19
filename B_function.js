@@ -22,7 +22,7 @@ var svgHeight = 400
 var barPadding = 30;
 var barWidth = (svgWidth / data.length);
 
-d3.select("svg").remove();
+d3.selectAll("svg").remove();
 var svg = d3.select("body")
     .append("svg")
     .attr("width", svgWidth)
