@@ -1,7 +1,7 @@
 function BrettData() {
 
 loadCssFile("brett_style.css")
-    
+
      // loads a css file
     function loadCssFile(filename) {
         var fileref = document.createElement("link")
@@ -11,19 +11,20 @@ loadCssFile("brett_style.css")
         fileref.setAttribute("href", filename)
         document.head.insertBefore(fileref, document.head.childNodes[document.head.childNodes.length - 1].nextSibling);
     }
-    
-    
-    
+
+
+
 // NFL concussion data
 var data = [265, 244, 212, 279, 250, 291];
 
 // var years = ["2012", "2013", "2014", "2015", "2016", "2017"];
 
-var svgWidth = 800; 
+var svgWidth = 800;
 var svgHeight = 400
 var barPadding = 30;
 var barWidth = (svgWidth / data.length);
-    
+
+d3.select("svg").remove();
 var svg = d3.select("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
@@ -34,14 +35,14 @@ var barChart = svg.selectAll("rect")
     .append("rect")
     .attr("class", "bar")
     .attr("y", function(d) {
-         return svgHeight - d 
+         return svgHeight - d
     })
-    .attr("height", function(d) { 
-        return d; 
+    .attr("height", function(d) {
+        return d;
     })
     .attr("width", barWidth - barPadding)
     .attr("transform", function (d, i) {
-        var translate = [barWidth * i, 0]; 
+        var translate = [barWidth * i, 0];
         return "translate("+ translate +")";
     });
 
@@ -51,7 +52,7 @@ svg.selectAll("text")
     .append("svg:text")
     .text(function(d) {return d;})
           .attr("class", "text")
-          .attr("x", function (d,i) {return (i * 140) + 36}) 
+          .attr("x", function (d,i) {return (i * 140) + 36})
           .attr("y", function (d,i) {return d})
           .attr("text-anchor", "middle");
 
@@ -60,7 +61,7 @@ svg.selectAll("text")
 
 /* Previous version
 
-// NFL concussion data 
+// NFL concussion data
 
 var data = [{year: 2012, concussions: 265},
             {year: 2013, concussions: 244},
