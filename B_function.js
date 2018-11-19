@@ -1,25 +1,5 @@
 function brettData()
 
-.text {
-  font-family: avenir;
-  font-size: 20px;
-}
-
-.bar-chart {
-  fx-padding: 10px;  
-  background-color: forestgreen;
-    text-align: top;  
-    padding: 25px;
-    margin: 1px;
-    fill: white;
-    stroke: black;
-    stroke-width: 2;  
-}
-
-.bar:hover {
-    fill:gray
-}
-
 // NFl concussion data
 var data = [265, 244, 212, 279, 250, 291];
 
