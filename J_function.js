@@ -1,7 +1,5 @@
 //scp d3vis/* jakutagawa@riverdance.soe.ucsc.edu:/soe/jakutagawa/.html/d3vis
 
-
-
 function jonData() {
 
     // loads a css file
@@ -24,7 +22,8 @@ function jonData() {
         left: 300
     };
 
-    var diameter = 600;
+    // set main variables for d3
+    //var diameter = 600;
     var width = 5000 - margin.left - margin.right;
     var height = 1000 - margin.top - margin.bottom;
     var clickToggle = false;
@@ -56,10 +55,12 @@ function jonData() {
             //.call(responsivefy)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // gather all mutation names and pathway predictions
         var mutationNames = d3.keys(datasets[0][0]).filter(function(key) {
             return key !== "Pathway";
         })
-        console.log(datasets[1])
+        //console.log(datasets[1])
         var pathwayPredictions = d3.values(datasets[1][0]).filter(function(value) {
             return value !== "HALLMARK_PANCREAS_BETA_CELLS";
         })
@@ -69,9 +70,9 @@ function jonData() {
         var call_data = datasets[1].slice(0, 20);
         var exp_data = datasets[2].slice(0, 20);
 
-        console.log(pval_data)
-        console.log(call_data[0])
-        console.log(exp_data)
+        //console.log(pval_data)
+        //console.log(call_data[0])
+        //console.log(exp_data)
 
         // iterate through pval data to build data groups
         var k = 0;
@@ -101,6 +102,7 @@ function jonData() {
         });
         console.log(pval_data)*/
 
+        // map values to x, y
         y.domain(pval_data.map(function(d) {
             return d["Pathway"];
         }));
@@ -110,14 +112,16 @@ function jonData() {
         //color.domain(mutationNames);
         color.domain(["NI", "GOF", "COF", "LOF", "Neutral"])
 
-        console.log(mutationNames)
-        console.log(pathwayPredictions)
+        //console.log(mutationNames)
+        //console.log(pathwayPredictions)
 
+        // tooltip box
         var div = d3.select('body')
             .append('div')
             .attr('class', 'tooltip')
             .style('opacity', 0);
 
+        // build svg
         var rows = svg.selectAll(".row")
             .data(pval_data)
             .enter()
@@ -159,10 +163,13 @@ function jonData() {
             })
             .attr("cx", x.bandwidth() / 2)
             .attr("cy", y.bandwidth() / 2)
+            // -log tranform pval for radius
             .attr("r", function(d) {
                 return d.value === 0 ? 0 : radius(-Math.log(d.value));
             })
+            // call highlightCircles on click
             .on("click", highlightCircles)
+            // add tooltip on mouseover
             .on("mouseover", function(d) {
                 div.transition()
                     .duration(200)
@@ -230,17 +237,17 @@ function jonData() {
         .attr('r', 20)
         .attr('fill', '#ff0000');
     }*/
-    
+
     // function to highlight same mutation in each pathway
     function highlightCircles(d) {
         if (!clickToggle) {
             var className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
             d3.selectAll("circle").transition().style("fill-opacity", function(d) {
-                if (elem.className !== className) return 0.07;
+                if (d.className !== className) return 0.07;
                 else return alpha(d.exp);
             })
             d3.selectAll("text").transition().style("fill-opacity", function(d) {
-                if (elem.className !== className) return 0.07;
+                if (d.className !== className) return 0.07;
                 else return 1;
             })
         } else {
