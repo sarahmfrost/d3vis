@@ -1,6 +1,6 @@
 function brettData() {
 
-// NFl concussion data
+// NFL concussion data
 var data = [265, 244, 212, 279, 250, 291];
 
 // var years = ["2012", "2013", "2014", "2015", "2016", "2017"];
