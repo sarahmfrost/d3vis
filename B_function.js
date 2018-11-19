@@ -1,4 +1,4 @@
-function brettData()
+function brettData() {
 
 // NFl concussion data
 var data = [265, 244, 212, 279, 250, 291];
@@ -41,6 +41,7 @@ svg.selectAll("text")
           .attr("y", function (d,i) {return d})
           .attr("text-anchor", "middle");
 
+}
 
 
 /* Previous version
