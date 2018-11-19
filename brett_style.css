@@ -3,7 +3,7 @@ text {
   font-size: 20px;
 }
 
-bar-chart {
+.bar-chart {
   fx-padding: 10px;  
   background-color: #228b22;
     text-align: top;  
@@ -14,6 +14,6 @@ bar-chart {
     stroke-width: 2;  
 }
 
-bar:hover {
+.bar:hover {
     fill:gray
 }
