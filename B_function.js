@@ -1,14 +1,14 @@
 function brettData() {
 
-var Width = 800; 
-var Height = 400
-var barPadding = 30;
-var barWidth = (svgWidth / data.length);
-
 // NFl concussion data
 var data = [265, 244, 212, 279, 250, 291];
 
 // var years = ["2012", "2013", "2014", "2015", "2016", "2017"];
+
+var svgWidth = 800; 
+var svgHeight = 400
+var barPadding = 30;
+var barWidth = (svgWidth / data.length);
     
 var svg = d3.select("svg")
     .attr("width", svgWidth)
