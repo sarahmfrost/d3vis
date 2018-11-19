@@ -23,11 +23,19 @@ var barPadding = 30;
 var barWidth = (svgWidth / data.length);
 
 d3.select("svg").remove();
-var svg = d3.select("svg")
+var svg = d3.select("body")
+    .append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
 
-var barChart = svg.selectAll("rect")
+svg.append("rect")
+.attr("width", "100%")
+    .attr("height", "100%")
+    .attr("fill", "#228b22")
+
+
+
+var barChart = svg.selectAll("bar")
     .data(data)
     .enter()
     .append("rect")
@@ -38,6 +46,9 @@ var barChart = svg.selectAll("rect")
     .attr("height", function(d) {
         return d;
     })
+    .attr("fill", '#FFFFFF')
+    .attr("stroke",'#000000')
+    .attr("stroke-width",2)
     .attr("width", barWidth - barPadding)
     .attr("transform", function (d, i) {
         var translate = [barWidth * i, 0];
