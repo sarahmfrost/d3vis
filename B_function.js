@@ -2,6 +2,18 @@ function BrettData() {
 
 loadCssFile("brett_style.css")
     
+     // loads a css file
+    function loadCssFile(filename) {
+        var fileref = document.createElement("link")
+
+        fileref.setAttribute("rel", "stylesheet")
+        fileref.setAttribute("type", "text/css")
+        fileref.setAttribute("href", filename)
+        document.head.insertBefore(fileref, document.head.childNodes[document.head.childNodes.length - 1].nextSibling);
+    }
+    
+    
+    
 // NFL concussion data
 var data = [265, 244, 212, 279, 250, 291];
 
