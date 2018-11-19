@@ -11,7 +11,7 @@ This is a joint project demonstrating the use of D3.js for data visualization.
 **S_function.js** - Sarah's javascript code
 
 **J_function.js** - Jon's javascript code  
-**jon_stylee.css** - Jon's css  
+**jon_style.css** - Jon's css  
 **eVIP_data** - Jon's eVIP data  
 
 **B_function.js** - Brett's javascript code  
