@@ -1,5 +1,7 @@
 function brettData() {
 
+loadCssFile("brett_style.css")
+    
 // NFL concussion data
 var data = [265, 244, 212, 279, 250, 291];
 
