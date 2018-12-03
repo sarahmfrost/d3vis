@@ -186,24 +186,26 @@ function jonData() {
             // add tooltip on mouseover
             .on("mouseover", function(d) {
                 d3.select(this).transition()
-                    .duration(250)
+                    .duration(50)
                     .attr("r", function(d) {
                         return d.value === 0 ? 0 : radius(-Math.log(d.value) * 1.25);
                     })
                 div.transition()
                     .duration(200)
                     .style('opacity', 0.9);
-
+                select_axis_label(d).attr('style', "font-weight: bolder;")
+                console.log(d)
                 div.html(d.name + "<br/>" + Math.round(d.exp * 100) / 100)
                     .style('left', d3.event.pageX + 'px')
                     .style('top', d3.event.pageY - 28 + 'px');
+
             })
             .on("mouseout", function(d) {
                 div.transition()
                     .duration(500)
                     .style('opacity', 0);
                 d3.select(this).transition()
-                    .duration(1000)
+                    .duration(1500)
                     .attr("r", function(d) {
                         return d.value === 0 ? 0 : radius(-Math.log(d.value));
                     });
@@ -274,6 +276,14 @@ function jonData() {
         .attr('fill', '#ff0000');
     }*/
 
+    function select_axis_label(datum) {
+        return d3.select('.y axis')
+            .selectAll('text')
+        /*.filter(function(x) {
+            return x == datum.letter;
+        });*/
+
+    }
     // function to highlight same mutation in each pathway
     function highlightCircles(d) {
         if (!clickToggle) {
@@ -305,7 +315,12 @@ function jonData() {
                 .attr("r", function(d) {
                     return d.value === 0 ? 0 : radius(-Math.log(d.value));
                 })
-
+            /*d3.selectAll(".y axis text").transition()
+                .duration(50)
+                .style("fill-opacity", function(d) {
+                    if (d.className !== className) return 0.025;
+                    else return 1;
+                })*/
         } else {
             // return the circles back to original state
             d3.selectAll("circle").transition()
