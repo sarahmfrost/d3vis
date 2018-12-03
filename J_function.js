@@ -57,6 +57,14 @@ function jonData() {
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+
+        function hue(h) {
+            svg.style("background-color", d3.hsl(h, 0.8, 0.8));
+        }
+
+
+
         // gather all mutation names and pathway predictions
         var mutationNames = d3.keys(datasets[0][0]).filter(function(key) {
             return key !== "Pathway";
@@ -117,6 +125,9 @@ function jonData() {
         //console.log(mutationNames)
         //console.log(pathwayPredictions)
 
+
+
+
         // tooltip box
         var div = d3.select('body')
             .append('div')
@@ -154,6 +165,7 @@ function jonData() {
             /*.style('fill', function(d, i) {
                 return color(d.name);
             })*/
+
             .style("fill-opacity", function(d, i) {
                 //console.log(alpha(d.exp))
                 return alpha(d.exp);
@@ -173,9 +185,15 @@ function jonData() {
             .on("click", highlightCircles)
             // add tooltip on mouseover
             .on("mouseover", function(d) {
+                d3.select(this).transition()
+                    .duration(250)
+                    .attr("r", function(d) {
+                        return d.value === 0 ? 0 : radius(-Math.log(d.value) * 1.25);
+                    })
                 div.transition()
                     .duration(200)
                     .style('opacity', 0.9);
+
                 div.html(d.name + "<br/>" + Math.round(d.exp * 100) / 100)
                     .style('left', d3.event.pageX + 'px')
                     .style('top', d3.event.pageY - 28 + 'px');
@@ -184,6 +202,11 @@ function jonData() {
                 div.transition()
                     .duration(500)
                     .style('opacity', 0);
+                d3.select(this).transition()
+                    .duration(1000)
+                    .attr("r", function(d) {
+                        return d.value === 0 ? 0 : radius(-Math.log(d.value));
+                    });
             });
 
         var text = cells.append("text")
@@ -198,6 +221,8 @@ function jonData() {
                 return d.value !== 0 ? d.value.toExponential(1) : '';
             });
 
+
+
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
@@ -208,6 +233,15 @@ function jonData() {
         svg.append("g")
             .attr("class", "y axis")
             .call(d3.axisLeft(y));
+
+        d3.select("circle").transition() // Gratuitous intro!
+            .duration(750)
+            .tween("hue", function() {
+                var i = d3.interpolate(0, 70);
+                return function(t) {
+                    hue(i(t));
+                };
+            });
 
 
         //.sum(function(d) { return d.name; });
@@ -244,9 +278,11 @@ function jonData() {
     function highlightCircles(d) {
         if (!clickToggle) {
             var className = d.name.replace(/[\ ,/-]+/g, "-").toLowerCase();
+            // make circles bright or not
             d3.selectAll("circle").transition()
                 .duration(500)
                 .style("fill-opacity", function(d) {
+                    // check if circle has same class name as clicked circle
                     if (d.className !== className) return 0.07;
                     else return alpha(d.exp);
                 })
@@ -256,6 +292,7 @@ function jonData() {
                 .attr("r", function(d) {
                     return d.value === 0 ? 0 : radius(-Math.log(d.value) * 1.5);
                 })
+            // fade out text opacity
             d3.selectAll("text").transition()
                 .duration(500)
                 .style("fill-opacity", function(d) {
@@ -270,6 +307,7 @@ function jonData() {
                 })
 
         } else {
+            // return the circles back to original state
             d3.selectAll("circle").transition()
                 .duration(500)
                 .style("fill-opacity", function(d) {
